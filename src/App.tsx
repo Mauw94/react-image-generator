@@ -16,18 +16,36 @@ class Images extends React.Component {
     }
 }
 
-class Search extends React.Component {
+class Search extends React.Component<{}, { error: boolean, errorMessage: string, loading: boolean }> {
     submitIcon: Element
+
+    constructor(props) {
+        super(props)
+        this.state = {
+            error: false,
+            errorMessage: "",
+            loading: false
+        }
+    }
 
     componentDidMount(): void {
         this.submitIcon = document.querySelector("#submit-icon")
         this.submitIcon.addEventListener("click", this.getImages)
     }
 
-    async getImages(): Promise<void> {
+    getImages = async () => {
         const imageSection = document.querySelector(".images-section")
         const input = document.getElementById("prompt") as HTMLInputElement | undefined
-        // TODO check for undefined return error
+
+        if (input.value == "") {
+            this.setState({
+                error: true,
+                errorMessage: "input field is empty",
+                loading: false
+            })
+            return
+        }
+
         const prompt = input.value
         const API_KEY = process.env.API_KEY
         const options = {
@@ -43,11 +61,26 @@ class Search extends React.Component {
             })
         }
         try {
+            this.setState({
+                error: false,
+                errorMessage: "",
+                loading: true
+            })
+
             imageSection.innerHTML = ""
-            console.log("fetching..")
-            // TODO: show loading icon
-            const response = await fetch("https://api.openai.com/v1/images/generations", options)
-            const data = await response.json()
+
+            let data: any
+            await fetch("https://api.openai.com/v1/images/generations", options)
+                .then(async (response) => {
+                    data = await response.json()
+                    this.setState({
+                        error: false,
+                        errorMessage: "",
+                        loading: false
+                    })
+                    input.value = ""
+                })
+
             data?.data.forEach((imageObj: any) => {
                 const imageContainer = document.createElement("div")
                 imageContainer.classList.add("image-container")
@@ -56,24 +89,48 @@ class Search extends React.Component {
                 imageContainer.append(imageElement)
                 imageSection.append(imageContainer)
             })
-            console.log(data)
+
         } catch (err) {
             console.error(err)
-            // TODO show error on page
+            this.setState({
+                error: true,
+                errorMessage: "Something went wrong, please try again",
+                loading: false
+            })
         }
     }
 
-
     render() {
         return (
-            <section className="bottom-section">
-                <div className="input-container">
-                    <input id="prompt" />
-                    <div id="submit-icon">➢</div>
-                </div>
-            </section>
+            <div>
+                {this.state.loading ? <LoadingSpinner /> : null}
+                <section className="bottom-section">
+                    <div className="input-container">
+                        <input id="prompt" />
+                        <div id="submit-icon">➢</div>
+                    </div>
+                </section>
+                <Error error={this.state.error} errorMessage={this.state.errorMessage} />
+            </div>
         )
     }
+}
+
+const Error = (props) => {
+    let { error, errorMessage } = props
+    if (error) {
+        return <p className="error">{errorMessage}</p>
+    }
+}
+
+function LoadingSpinner() {
+    return (
+        <div>
+            <div className="spinner-container">
+                <div className="loading-spinner"></div>
+            </div>
+        </div>
+    )
 }
 
 class Background extends React.Component {
