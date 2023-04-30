@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA=Compatible" content="ie=edge">
+    <title>Image Generator</title>
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+            background-color: #0a1a40;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        }
+
+        h1 {
+            color: rgb(255, 255, 255);
+            height: 150px;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .error {
+            color: rgb(255, 0, 0);
+            display: flex;
+            align-items: center;
+            width: 100%;
+            justify-content: center;
+        }
+
+        svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -10;
+        }
+
+        .bottom-section {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            height: 150px;
+        }
+
+        .input-container {
+            width: 100%;
+            max-width: 600px;
+            position: relative;
+        }
+
+        input {
+            width: 100%;
+            border: none;
+            font-size: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: rgb(38, 57, 77) 0 20px 30px -10px;
+            box-sizing: border-box;
+        }
+
+        #submit-icon {
+            position: absolute;
+            top: 10px;
+            right: 30px;
+            cursor: pointer;
+        }
+
+        .images-section {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            padding: 10px;
+        }
+
+        .image-container {
+            width: 48%;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: rgb(38, 57, 77) 0 20px 30px -10px;
+        }
+
+        .image-container img {
+            width: 100%;
+        }
+
+        @keyframes spinner {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .spinner-container {
+            display: grid;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 10px solid #f3f3f3;
+            border-top: 10px solid #383636;
+            border-radius: 50%;
+            animation: spinner 1.5s linear infinite;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Shmy Image Generator</h1>
+    <div id="root"></div>
+    <script src="dist/bundle.js" type="text/javascript"></script>
+</body>
+
+</html>
